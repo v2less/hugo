@@ -1,0 +1,40 @@
+baseURL: 'https://v2less.com'
+title: The way to minimalist.
+theme: etch
+languageCode: en-US
+enableInlineShortcodes: true
+pygmentsCodeFences: true
+pygmentsUseClasses: true
+ignoreErrors:
+  - error-missing-instagram-accesstoken
+  - error-remote-getjson
+params:
+  description: The way to minimalist.
+  copyright: Copyright © 2018-2021 v2less
+  dark: auto
+  highlight: true
+menu:
+  main:
+    - identifier: posts
+      name: posts
+      title: posts
+      url: /
+      weight: 10
+    - identifier: navi
+      name: navi
+      title: navi
+      url: /navi/
+      weight: 20
+    - identifier: about
+      name: about
+      title: about
+      url: /about/
+      weight: 30
+permalinks:
+  posts: '/:title/'
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+  tableOfContents:
+    ordered: true
