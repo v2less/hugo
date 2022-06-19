@@ -25,11 +25,16 @@ menu:
       title: navi
       url: /navi/
       weight: 20
+    - identifier: list
+      name: list
+      title: list
+      url: /list/
+      weight: 30
     - identifier: about
       name: about
       title: about
       url: /about/
-      weight: 30
+      weight: 40
 permalinks:
   posts: '/:title/'
 markup:
