@@ -23,35 +23,34 @@ pipeline {
     //参数化
     parameters {
         choice(
-            choices: ['ONE', 'TWO'], 
+            choices: ['ONE', 'TWO'],
             name: 'PARAMETER_01'
         )
         booleanParam(
-            defaultValue: true, 
-            description: '', 
+            defaultValue: true,
+            description: '',
             name: 'BOOLEAN'
         )
         text(
             defaultValue: '''
-                                this is a multi-line 
+                                this is a multi-line
                                 string parameter example
-                                ''', 
+                                ''',
             name: 'MULTI-LINE-STRING'
         )
         string(
-            defaultValue: 'scriptcrunch', 
-            name: 'STRING-PARAMETER', 
+            defaultValue: 'scriptcrunch',
+            name: 'STRING-PARAMETER',
             trim: true
         )
-        passwd(name: 'PASSWD', defaultValue: 'SECRET', description: 'A secret password')
+        //mask-passwords插件
+        password(name: 'KEY', description: 'Encryption key')
     }
     options {
         //保存最近历史构建记录的数量
         buildDiscarder(logRotator(numToKeepStr: '5'))
         //禁止pipeline同时执行 存在抢占资源或调用冲突的场景下，此选项非常有用
         disableConcurrentBuilds()
-        //当agent为docker或dockerfile时，指定在同一个Jenkins节点上，每个stage都分别运行在一个新的容器中，而不是所有stage都运行在同一个容器中。
-        newContainerPerStage()
         //当失败时，指定整个pipeline的重试次数，可以放在stage块中
         retry(4)
         //超时时间，HOURS（小时） SECONDS（秒） MINUTES（分钟）为单位
@@ -161,7 +160,9 @@ def createVersion(String BUILD_NUMBER) {
 
 Prometheus是pull模式收集指标数据
 
+- Metrics
 
+可以提供job构建时间和git来源等，以及api.
 
 ## 工具
 
@@ -178,6 +179,14 @@ https：//github.com/ernestas-poskus/ansible-prometheus
 需要java环境
 
 
+## 升级到最新版
+
+```bash
+wget http://updates.jenkins-ci.org/download/war/latest/jenkins.war
+cp /usr/share/java/jenkins.war jenkins.war.pre
+sudo cp jenkins.war /usr/share/java/jenkins.war
+sudo systemctl restart jenkins.service
+```
 
 
 
