@@ -72,6 +72,7 @@ RUN apt install -y iproute2 net-tools iputils-ping
 ```
 
 ## Docker-copose.yaml实例
+### android构建用自构建docker镜像
 ```yaml
 version: '3'
 services:
@@ -119,9 +120,69 @@ docker-compose --compatibility up -d
 docker-compose down
 ```
 
+### gitlab实例
+
+```yaml
+version: '3'
+services:
+  gitlab:
+    image: 'twang2218/gitlab-ce-zh'
+    container_name: gitlab
+    restart: always
+    hostname: '10.12.21.251'
+    environment:
+      TZ: 'Asia/Shanghai'
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://10.12.21.251:9001'
+        gitlab_rails['gitlab_shell_ssh_port'] = 3022
+        unicorn['port'] = 8888
+        nginx['listen_port'] = 9001
+    ports:
+      - '9001:9001'
+      - '443:443'
+      - '3022:22'
+    volumes:
+      - /git/gitlab/config:/etc/gitlab
+      - /git/gitlab/data:/var/opt/gitlab
+      - /git/gitlab/log:/var/log/gitlab
+    deploy:
+      resources:
+        limits:
+          cpus: '16'
+          memory: 32G
+        reservations:
+          cpus: '12'
+          memory: 24G
+```
 
 
 
+### nexus实例
+
+```yaml
+version: '3'
+services:
+  nexus:
+    image: 'sonatype/nexus3'
+    container_name: nexus
+    restart: always
+    user: root
+    environment:
+      - TZ=Asia/Shanghai
+    ports:
+      - '8081:8081'
+      - '5000:5000'
+    volumes:
+      - '/nexus:/nexus-data'
+    deploy:
+      resources:
+        limits:
+          cpus: '16'
+          memory: 32G
+        reservations:
+          cpus: '12'
+          memory: 24G
+```
 
 
 
