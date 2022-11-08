@@ -25,7 +25,7 @@ COPY .ssh/* /root/.ssh/
 RUN sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config && \
       sed -i 's/required/sufficient/g' /etc/pam.d/chsh
 # 生成sshkey
-RUN ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key
+RUN yes 'y' | ssh-keygen -q -t dsa -N '' -f /etc/ssh/ssh_host_dsa_key
 # 开放22端口
 EXPOSE 22
 USER ${user}
@@ -183,6 +183,31 @@ services:
           cpus: '12'
           memory: 24G
 ```
+
+## 图形化管理工具portainer
+
+### 设置docker registry镜像和自架设的nexus地址
+```bash
+cat /etc/docker/daemon.json
+{
+  "registry-mirrors": [
+    "http://10.12.21.251:5000"
+  ],
+  "insecure-registries": [
+    "10.12.21.251:5000"
+  ]
+}
+```
+
+### 启动portainer
+
+```bash
+docker volume create portainer_data
+
+docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce
+```
+
+### 浏览器打开: https://127.0.0.1:9443
 
 
 
