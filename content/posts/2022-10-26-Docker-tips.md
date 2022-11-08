@@ -213,16 +213,90 @@ cat /etc/docker/daemon.json
 
 ### 启动portainer
 
+#### docker run方式
 ```bash
 docker volume create portainer_data
 
 docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data -e http_proxy=http://10.12.18.48:8118 -e https_proxy=http://10.12.18.48:8118 portainer/portainer-ce
 ```
+#### docker-compose方式
+docker-compose.yml
+```yml
+version: '3'
+services:
+  portainer:
+    image: 'portainer/portainer-ce'
+    container_name: portainer
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    privileged: true
+    ports:
+      - '8000:8000'
+      - '9443:9443'
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+      - '/var/lib/docker/volumes/portainer_data:/data'
+    deploy:
+      resources:
+        limits:
+          cpus: '16'
+          memory: 32G
+        reservations:
+          cpus: '12'
+          memory: 24G
+```
+启动:
+```bash
+docker-compose --compatibility up -d
+```
 
 ### 浏览器打开: https://127.0.0.1:9443
 
+## protainer-agent
 
+在客户端服务器上运行:
 
+### docker run方式
+```bash
+docker run -d -p 9101:9001 --name portainer_agent --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v /var/lib/docker/volumes:/var/lib/docker/volumes portainer/agent
+```
+### docker-compose方式
+docker-compose.yml
+```yml
+version: '3'
+services:
+  portainer:
+    image: 'portainer/agent'
+    container_name: portainer_agent
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    privileged: true
+    ports:
+      - '9101:9001'
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+      - '/var/lib/docker/volumes:/var/lib/docker/volumes'
+    deploy:
+      resources:
+        limits:
+          cpus: '8'
+          memory: 8G
+        reservations:
+          cpus: '4'
+          memory: 4G
+```
+启动:
+```bash
+docker-compose --compatibility up -d
+```
+
+到portainer管理界面, 添加一个 Environments
+
+Docker Standalone --> Agent -->
+
+Environment address: agent_ip:9101
 
 ## 文档信息
 ---
