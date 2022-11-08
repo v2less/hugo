@@ -6,6 +6,18 @@ tags: ["linux"]
 draft: false
 ---
 
+## 代理
+
+### 构建代理
+
+```bash
+docker build --net=host --build-arg http_proxy=http://x.x.x.x:8118 --build-arg https_proxy=http://x.x.x.x:8118 -t imagename .
+```
+### 运行代理
+
+```bash
+docker run -it --rm -e http_proxy=http://x.x.x.x:8118 -e https_proxy=http://x.x.x.x:8118 nginx:latest
+```
 ## Docker镜像内置sshd服务
 
 ```yaml
@@ -204,7 +216,7 @@ cat /etc/docker/daemon.json
 ```bash
 docker volume create portainer_data
 
-docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce
+docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data -e http_proxy=http://10.12.18.48:8118 -e https_proxy=http://10.12.18.48:8118 portainer/portainer-ce
 ```
 
 ### 浏览器打开: https://127.0.0.1:9443
