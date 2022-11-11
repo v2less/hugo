@@ -6,6 +6,12 @@ tags: ["linux"]
 draft: false
 ---
 
+## 安装docker
+
+```bash
+curl -fsSL https://get.docker.com | sh
+```
+
 ## 代理
 
 ### 构建代理
@@ -81,6 +87,12 @@ RUN chsh ${user} -s /bin/zsh
 ## Ubuntu默认Docker镜像没有ping ifconfig命令
 ```yaml
 RUN apt install -y iproute2 net-tools iputils-ping
+```
+## docker中运行docker的方法之一
+
+```bash
+sudo chmod 666 /var/run/docker.sock
+docker run --privileged=true -v /var/run/docker.sock:/var/run/docker.sock -it ...
 ```
 
 ## Docker-copose.yaml实例
@@ -297,6 +309,10 @@ docker-compose --compatibility up -d
 Docker Standalone --> Agent -->
 
 Environment address: agent_ip:9101
+
+## 有用的docker镜像
+
+- nginx文件服务器带主题: https://github.com/fraoustin/fancyindex
 
 ## 文档信息
 ---
