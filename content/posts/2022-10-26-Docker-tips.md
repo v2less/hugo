@@ -84,6 +84,7 @@ ENV LANG="en_US.UTF-8"
 ```yaml
 RUN chsh ${user} -s /bin/zsh
 ```
+
 ## Ubuntu默认Docker镜像没有ping ifconfig命令
 ```yaml
 RUN apt install -y iproute2 net-tools iputils-ping
@@ -94,6 +95,25 @@ RUN apt install -y iproute2 net-tools iputils-ping
 sudo chmod 666 /var/run/docker.sock
 docker run --privileged=true -v /var/run/docker.sock:/var/run/docker.sock -it ...
 ```
+## 使用主机的代理
+docker-compose.yml
+```yaml
+---
+version: "2"
+
+services:
+  xxx:
+    build: .
+    container_name: xxx
+    image: xxx:latest
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "127.0.0.1:8853:53/udp"
+      - "127.0.0.1:9150:9150/tcp"
+    restart: unless-stopped
+```
+在容器中就可以使用`host.docker.internal`作为host的地址来访问。
 
 ## Docker-copose.yaml实例
 ### android构建用自构建docker镜像
