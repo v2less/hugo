@@ -313,6 +313,9 @@ Environment address: agent_ip:9101
 ## 有用的docker镜像
 
 - nginx文件服务器带主题: https://github.com/fraoustin/fancyindex
+```bash
+docker run -d -v <localpath>:/share -e DISABLE_AUTH=true --name fancyindex -p 80:80 fraoustin/fancyindex
+```
 
 ## 文档信息
 ---
