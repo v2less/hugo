@@ -23,7 +23,7 @@ menu:
     - identifier: navi
       name: navi
       title: navi
-      url: /navi/
+      url: https://navi.v2less.com
       weight: 20
     - identifier: list
       name: list
