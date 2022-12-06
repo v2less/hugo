@@ -88,6 +88,8 @@ pipeline {
         password(name: 'KEY', description: 'Encryption key')
     }
     options {
+        //设置在项目打印日志时带上对应时间
+        timestamps()
         //保存最近历史构建记录的数量
         buildDiscarder(logRotator(numToKeepStr: '5'))
         //禁止pipeline同时执行 存在抢占资源或调用冲突的场景下，此选项非常有用
@@ -122,6 +124,9 @@ pipeline {
                 }
                 //在声明式pipeline中使用脚本
                 script {
+                    //jenkins构建任务显示的名字和描述
+                    currentBuild.displayName = "${BUILD_ID}"
+                    currentBuild.description = "${env.DEFAULT_BRANCH}"
                     def mvnHome = tool 'Maven 3.3.9'
                     //判断是否为类unix系统
                     if (isUnix()) {
