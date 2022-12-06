@@ -9,12 +9,46 @@ draft: false
 ## Jenkinsfile
 
 ```groovy
+//根据gerrit传递过来的参数是否存在来设置全局的环境变量
+if (env.GERRIT_BRANCH) {
+    env.DEFAULT_BRANCH = "${env.GERRIT_BRANCH}"
+}
+else {
+//如果没有env.GERRIT_BRANCH环境变量则使用参数的值,并当参数为空时设置默认的值
+    env.DEFAULT_BRANCH = "${params.branch_param}" ?: 'lineage-18.1'
+}
+
+//字符串替换
+env.BRANCH_PATH = "${env.DEFAULT_BRANCH}".replaceAll('/','_')
+
 String agentTag = "halium-$haliumVersion"
 String artifacts = 'halium*'
+//根据JOB_NAME中是否包含特定的字符串来判断设置变量
+if (env.JOB_NAME.contains("halium9.0")) {
+    up_project = "xenial-hybris-android9-rootfs-arm64" + "_" + "${env.JOB_NAME}".split('_').last()
+} else if (env.JOB_NAME.contains("halium10.0")) {
+    up_project = "xenial-hybris-android9-android10-rootfs-arm64" + "_" + "${env.JOB_NAME}".split('_').last()
+} else if (env.JOB_NAME.contains("linux-halium11.0")) {
+    up_project = "rootfs-arm64-linux" + "_" + "${env.JOB_NAME}".split('_').last()
+} else if (env.JOB_NAME.contains("halium11.0")) {
+    up_project = "xenial-hybris-android9-android11-rootfs-arm64" + "_" + "${env.JOB_NAME}".split('_').last()
+}
+
 
 pipeline {
     //agent any
-    agent { label "$agentTag" }
+    //agent { label "$agentTag" }
+    //使用docker构建
+    agent {
+        docker {
+        //使用双引号,用变量来指定docker镜像
+        image "ci-${env.docker_build_ver}-arm64:latest"
+        //使用变量来指定label构建用的节点
+        label "$agentTag"
+        args "--net=host -v /data:/build -u jenkins --privileged --cpus=32 --memory=49152m --entrypoint=''"
+        alwaysPull true
+        }
+    }
     environment {
         CC = 'clang'
         PATH = "/usr/local/tools/bin:$PATH"
@@ -22,6 +56,13 @@ pipeline {
     }
     //参数化
     parameters {
+        string(
+            name: 'branch_param',
+            defaultValue: "${DEFAULT_BRANCH}",
+            description: """The branch name:
+                          lineage-18.1,
+                          lineage-17.1"""
+        )
         choice(
             choices: ['ONE', 'TWO'],
             name: 'PARAMETER_01'
@@ -56,10 +97,11 @@ pipeline {
         //超时时间，HOURS（小时） SECONDS（秒） MINUTES（分钟）为单位
         timeout(time: 25, unit: 'MINUTES')
     }
-    //设置定时人物
+    //设置定时任务
    triggers {
       //由上游任务触发
-      upstream(upstreamProjects: 'job1,job2', threshold: hudson.model.Result.SUCCESS)
+      upstream(upstreamProjects: "${up_project}", threshold: hudson.model.Result.SUCCESS)
+      //定时构建
       cron('H 1 * * *')
     }
 
