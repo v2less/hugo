@@ -193,6 +193,20 @@ auto usb0
 
 ## 小技巧
 
+## 虚拟机配置网卡
+``cat /etc/network/interfaces.d/ens18
+```bash
+# The primary network interface
+allow-hotplug ens18
+iface ens18 inet static
+        address 192.168.1.20/24
+        gateway 192.168.1.1
+        # 路由优先级，数字越小优先级越高
+        metric 100
+        # dns-* options are implemented by the resolvconf package, if installed
+        dns-nameservers 8.8.8.8
+```
+
 当网桥使用后，再修改网桥ip或者绑定的物理网卡ip,使用 `ifup vmbr0/eth0`让配置生效即可。
 
 
