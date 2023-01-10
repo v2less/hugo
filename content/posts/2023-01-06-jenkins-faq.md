@@ -6,7 +6,32 @@ tags: ["linux"]
 draft: false
 ---
 
+## Jenkins插件和任务备份
 
+Step 1: Go to your Jenkins and click on the Manage Jenkins option.
+
+Step 2: Select Jenkins CLI option from the list of available options.
+
+Step 3: Download jenkins-cli.jar.
+
+```bash
+wget <your server url>/jnlpJars/jenkins-cli.jar
+```
+
+Step 4: Once you have to download the jar you just run below command.
+-  list plugins.
+
+```bash
+java -jar jenkins-cli.jar -s <your server url> -auth USER:TOKEN list-plugins
+```
+-  list jobs.
+```bash
+java -jar jenkins-cli.jar -s <your server url> -auth USER:TOKEN list-jobs
+```
+这种cli命令方式并不太好用，放弃用于备份，可以使用其列出插件的名字，用于构建新的jenkins docker镜像。
+
+- 备份插件
+ThinBackup
 
 ## 常见错误
 
