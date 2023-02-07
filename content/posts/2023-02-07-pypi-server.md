@@ -1,5 +1,5 @@
 ---
-title: "2023 02 07 Pypi Server"
+title: "Pypi Server"
 date: 2023-02-07T11:02:17+08:00
 author: v2less
 tags: ["linux"]
