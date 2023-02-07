@@ -1,2 +1,2 @@
 # hugo
-This is a blog by using blogdown.
+This is a blog by using hugo.
