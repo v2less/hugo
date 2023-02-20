@@ -40,7 +40,7 @@ new: validate-create ## Create a new post in posts folder
     else \
         echo "Something wrong";\
     fi;\
-    typora "$$filename";\
+    vim "$$filename";\
 	}
 
 .PHONY: push
