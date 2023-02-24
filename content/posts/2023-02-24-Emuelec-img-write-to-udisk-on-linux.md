@@ -36,7 +36,7 @@ Number  Start        End           Size          Type     File system  Flags
 ```bash
 sudo losetup --partscan --show --find Emuelec\ 4.6-正式版-s905x2x3X4-s922-57.5g-2.img
 ```
-设备``/dev/loop11，三个分区：/dev/loop11p1 /dev/loop11p2 /dev/loop11p3
+设备` /dev/loop11，三个分区：/dev/loop11p1 /dev/loop11p2 /dev/loop11p3
 ## dd img的分区到优盘对应分区
 ```bash
 sudo dd if=/dev/loop11p1 of=/dev/sda1 bs=1024 status=progress
@@ -49,6 +49,13 @@ sudo mount /dev/sda3 /mnt
 sudo rsync -av --delete rootfs/* /mnt/
 ```
 
+## 卸载
+```bash
+sudo umount rootfs
+sudo umount /mnt
+sudo losetup -a
+sudo losetup -d /dev/loop11
+```
 
 
 
