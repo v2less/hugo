@@ -6,13 +6,19 @@ slug: list
 ---
 ## 2023
 ### Book
+
 - 你是你吃出来的2：慢病康复的饮食密码
+- [编程小白的第一本Python入门书](https://github.com/yangzhenhe111/daolun/blob/master/%E7%BC%96%E7%A8%8B%E5%B0%8F%E7%99%BD%E7%9A%84%E7%AC%AC%E4%B8%80%E6%9C%AC%20Python%20%E5%85%A5%E9%97%A8%E4%B9%A6.pdf)
+
 ### 动漫
+
 - BLAME
 - 烙印勇士
 - 怕痛的我，把防禦力點滿就對了
 - 異世界歸來的舅舅
 - 天空侵犯
+- 列比乌斯
+- 义体置换
 
 ## 2022
 
@@ -25,6 +31,7 @@ slug: list
 - Don't Look Up
 
 ### 美剧
+
 - 女佣
 - 怪奇物语
 
@@ -41,5 +48,6 @@ slug: list
 - BLEACH 死神 千年血戰篇
 
 ### Book
+
 - 明朝那些事儿
 - 悉达多
