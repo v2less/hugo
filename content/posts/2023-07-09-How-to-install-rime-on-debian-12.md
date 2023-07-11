@@ -6,15 +6,15 @@ tags: ["linux"]
 draft: false
 ---
 
-## install fcitx-rime
+## install fcitx5-rime
 
 <https://github.com/fcitx/fcitx-rime>
 
 ```bash
-sudo apt-get install fcitx-rime
-fcitx-autostart
+sudo apt-get install fcitx5-rime
+cp /usr/share/applications/org.fcitx.Fcitx5.desktop .config/autostart/
 ```
-## switch ibus to fcitx
+## switch ibus to fcitx5
 ```bash
 im-config
 ```
@@ -34,17 +34,17 @@ im-config
 
 ```bash
 git clone https://github.com/Iorest/rime-setting.git
-mkdir ~/.config/fcitx/rime
+mkdir ~/.config/fcitx5/rime
 cd rime-setting
 cp -ra font/* ~/.local/share/fonts/
 fc-cache -fv ~/.local/share/fonts/
 rm -rf fonts
-cp -av * ~/.config/fcitx/rime/
+cp -av * ~/.config/fcitx5/rime/
 cd ..
 git clone https://github.com/Iorest/rime-dict.git
 cd rime-dict
-cp -av * ~/.config/fcitx/rime/dicts/
-cd ~/.config/fcitx/rime/
+cp -av * ~/.config/fcitx5/rime/dicts/
+cd ~/.config/fcitx5/rime/
 vi luna_pinyin.extended.dict.yaml
 ```
 
