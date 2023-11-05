@@ -1,4 +1,4 @@
-baseURL: 'https://v2less.com'
+baseURL: 'https://pinolly.top'
 title: The way to minimalist.
 theme: etch
 languageCode: en-US
@@ -10,7 +10,7 @@ ignoreErrors:
   - error-remote-getjson
 params:
   description: The way to minimalist.
-  copyright: Copyright © 2018-2021 v2less
+  copyright: Copyright © 2018-2021 lessismore
   dark: auto
   highlight: true
 menu:
@@ -23,7 +23,7 @@ menu:
     - identifier: navi
       name: navi
       title: navi
-      url: https://navi.v2less.com
+      url: https://navi.pinolly.top
       weight: 20
     - identifier: list
       name: list
