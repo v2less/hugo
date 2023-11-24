@@ -433,22 +433,18 @@ filters:
 
 ### AdguardHome + OpenClash 配合使用
 
-前几天，保留dnsmasq时，各种调试都失败。
 
-改掉dnsmasq默认端口，使之无效化，我也不敢直接停掉。。。。。不太懂。
-
-整体思路：客户端-->AdguardHome-->OpenClash-->互联网
-
-虽然可以用了，但还是不太理想，一段时间后，访问google会失败。有没有更好地方法？
+整体思路：客户端-->dnsmasq-->AdguardHome-->OpenClash-->互联网
 
 - 首先订阅一个服务并启用op，使之能够访问网络
 - AdguardHome更新核心，不选择重定向，启用。
-- 打开Adg网页管理页面，如果出现无法登录的情况，可能是使用了快速配置，这个时候去ssh删除配置文件/etc/AdGuardHome.yaml，并重启adg服务：
+- - 打开Adg网页管理页面，如果出现无法登录的情况，可能是使用了快速配置，这个时候去ssh删除配置文件/etc/AdGuardHome.yaml，并重启adg服务：
 
 ```bash
 chmod 755 /etc/init.d/AdGuardHome
 service AdGuardHome restart
 ```
+- - 访问路由器ip:3000/install.html进行向导安装配置，举例设定：网页端口3000，dns端口5353。
 
 - OP设置：
 
@@ -457,17 +453,10 @@ service AdGuardHome restart
   - Fallback-Filter 启用
   - dns服务器默认的即可
 
-- 网络，架空dnsmasq的dns服务和dhcp服务
-
-- - DHCP/DNS-->高级-->DNS 服务器端口 默认是53，改成其他端口，例如51
-
-- - 网络-->接口-->LAN-->高级设置-->DHCP 服务器-->忽略此接口
-
 - Adg设置：
 
 - - 重定向：使用53端口替换dnsmasq
   - 网页管理界面，DNS设置-->上游dns服务器改成OP的地址：`127.0.0.1:7874`
-  - 网页管理界面，DHCP设置开启
   - 网页管理界面，过滤器，黑名单参考，可以直接在Adg的配置里改：
 
   ```yml
@@ -506,7 +495,9 @@ service AdGuardHome restart
       id: 1700569146
   ```
 
-  
+- DHCP/DNS-->
+
+DNS 转发-->odg的dns端口，例如：``127.0.0.1#5353``
 
 
 
