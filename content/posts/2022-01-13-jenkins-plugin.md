@@ -14,13 +14,19 @@ draft: false
 - Blue Ocean
 - Workspace Cleanup
 - - 提供cleanWs()方法，清理工作空间
-- Build With Parameters
 - Build Timeout
 - ansiColor 彩色输出
-
-
-
-
+- Parameterized Trigger
+- Build With Parameters
+- Role-based Authorization Strategy
+- - 首先到 系统管理-->安全-->全局安全设置(manage/configureSecurity/) --> 授权策略，选择 Role-Based Strategy
+- - 然后到 系统管理-->安全-->Manage and Assign Roles
+- Scriptler
+- ThinBackup
+- Job Configuration History
+    功能：保存job configuration的历史，记录每一次改动的信息。对于job configuration每一次的改变，保存一个config.xml文件。提供overview页面，方便查看全部的改变。可以对比查看两次改动之间的区别。
+- Conditional BuildStep
+    功能：可以灵活配置的build step。通常和Parameterized Trigger配合使用。
 
 
 
