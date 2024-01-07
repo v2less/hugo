@@ -349,6 +349,14 @@ Environment address: agent_ip:9101
 docker run -d -v <localpath>:/share -e DISABLE_AUTH=true --name fancyindex -p 80:80 fraoustin/fancyindex
 ```
 
+## Casaos
+
+Casa OS是一个基于Docker生态系统的开源家庭云系统，专为家庭场景而设计。致力于打造全球最简单、最易用、最优雅的家居云系统。
+
+```bash
+curl -fsSL get.casaos.io/install.sh | sudo bash
+```
+
 ## 文档信息
 ---
 - 版权声明：自由转载-非商用-非衍生-保持署名（[创意共享3.0许可证](https://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh)）
