@@ -9,9 +9,21 @@ draft: false
 ## 安装docker
 
 ```bash
-curl -fsSL https://get.docker.com | sh
+#!/bin/bash
+curl -fsSL https://get.docker.com | sudo bash -s docker --mirror Aliyun
 ```
+## 国内加速
+```bash
+cat /etc/docker/daemon.json
+{
+  "registry-mirrors": [
+    "https://hub-mirror.c.163.com",
+    "https://mirror.baidubce.com"
+  ],
+  "live-restore": true
+}
 
+```
 ## 代理
 
 ### 构建代理
