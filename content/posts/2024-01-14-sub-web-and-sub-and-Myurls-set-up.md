@@ -248,7 +248,7 @@ docker compose up -d
 ```bash
 cd /etc/nginx/sites-enabled
 ls
-i.pinolly.top  sub.pinolly.top  subweb.pinolly.top
+i.abc.com  sub.abc.com  subweb.abc.com
 ```
 - i.abc.com
 ```yml
@@ -260,21 +260,21 @@ upstream i_backend {
 
 server {
     listen 80;
-    server_name i.pinolly.top;
+    server_name i.abc.com;
     return 301 https://$host$request_uri;
 }
 
 server {
     listen 443 ssl http2;
-    server_name i.pinolly.top;
+    server_name i.abc.com;
 
-    ssl_certificate /data/i.pinolly.top.crt;
-    ssl_certificate_key /data/i.pinolly.top.key;
-    ssl_trusted_certificate /data/i.pinolly.top.crt;
+    ssl_certificate /data/i.abc.com.crt;
+    ssl_certificate_key /data/i.abc.com.key;
+    ssl_trusted_certificate /data/i.abc.com.crt;
     include /etc/nginx/ssl_params;
 
-    access_log /var/log/nginx/i.pinolly.top_access.log;
-    error_log /var/log/nginx/i.pinolly.top_error.log warn;
+    access_log /var/log/nginx/i.abc.com_access.log;
+    error_log /var/log/nginx/i.abc.com_error.log warn;
 
     location / {
         proxy_pass http://i_backend;
@@ -333,21 +333,21 @@ upstream sub_backend {
 
 server {
     listen 80;
-    server_name sub.pinolly.top;
+    server_name sub.abc.com;
     return 301 https://$host$request_uri;
 }
 
 server {
     listen 443 ssl http2;
-    server_name sub.pinolly.top;
+    server_name sub.abc.com;
 
-    ssl_certificate /data/sub.pinolly.top.crt;
-    ssl_certificate_key /data/sub.pinolly.top.key;
-    ssl_trusted_certificate /data/sub.pinolly.top.crt;
+    ssl_certificate /data/sub.abc.com.crt;
+    ssl_certificate_key /data/sub.abc.com.key;
+    ssl_trusted_certificate /data/sub.abc.com.crt;
     include /etc/nginx/ssl_params;
 
-    access_log /var/log/nginx/sub.pinolly.top_access.log;
-    error_log /var/log/nginx/sub.pinolly.top_error.log warn;
+    access_log /var/log/nginx/sub.abc.com_access.log;
+    error_log /var/log/nginx/sub.abc.com_error.log warn;
 
     location / {
         proxy_pass http://sub_backend;
@@ -380,21 +380,21 @@ upstream subweb_backend {
 
 server {
     listen 80;
-    server_name subweb.pinolly.top;
+    server_name subweb.abc.com;
     return 301 https://$host$request_uri;
 }
 
 server {
     listen 443 ssl http2;
-    server_name subweb.pinolly.top;
+    server_name subweb.abc.com;
 
-    ssl_certificate /data/subweb.pinolly.top.crt;
-    ssl_certificate_key /data/subweb.pinolly.top.key;
-    ssl_trusted_certificate /data/subweb.pinolly.top.crt;
+    ssl_certificate /data/subweb.abc.com.crt;
+    ssl_certificate_key /data/subweb.abc.com.key;
+    ssl_trusted_certificate /data/subweb.abc.com.crt;
     include /etc/nginx/ssl_params;
 
-    access_log /var/log/nginx/subweb.pinolly.top_access.log;
-    error_log /var/log/nginx/subweb.pinolly.top_error.log warn;
+    access_log /var/log/nginx/subweb.abc.com_access.log;
+    error_log /var/log/nginx/subweb.abc.com_error.log warn;
 
     location / {
         proxy_pass http://subweb_backend;
