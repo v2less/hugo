@@ -33,6 +33,10 @@ draft: false
 if(manager.logContains("Started by timer")){
     env.BUILD_MODE = "new"
 }
+String HTTP_URL= "www.google.com"
+description = "<a href='${HTTP_URL}'</a>" + "google"
+manager.addShortText(description, "black", "white", "1.5px", "white");
+
 manager.addShortText("${manager.getEnvVariable('Project_Name')}")
 manager.addBadge("success.gif", "success")
 manager.addWarningBadge("build Failure.")
