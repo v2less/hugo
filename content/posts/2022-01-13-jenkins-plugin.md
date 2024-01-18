@@ -33,14 +33,19 @@ draft: false
 if(manager.logContains("Started by timer")){
     env.BUILD_MODE = "new"
 }
-String HTTP_URL= "www.google.com"
-description = "<a href='${HTTP_URL}'</a>" + "google"
-manager.addShortText(description, "black", "white", "1.5px", "white");
-
 manager.addShortText("${manager.getEnvVariable('Project_Name')}")
 manager.addBadge("success.gif", "success")
 manager.addWarningBadge("build Failure.")
 manager.addBadge("error.gif", "failed")
+```
+- 给描述增加超链接
+/manage/configureSecurity/
+标记格式器 改成 Safe HTML
+```groovy
+String description = "<a href='${env.DOWNLOAD_URL}' target='_blank'>Download</a>"
+currentBuild.description = "${env.PROC_NAME} " +  "${env.BUILD_VERSION} \n" +
+    ¦   ¦   "${env.BUILD_MODE} " + "${env.BUILD_EDITION} \n" +
+    ¦   ¦   "${description}"
 ```
 
 
