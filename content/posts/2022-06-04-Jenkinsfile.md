@@ -109,6 +109,15 @@ pipeline {
 
     stages {
         stage("init") {
+            when {
+                allOf {
+                    anyOf {
+                        expression { params.GERRIT_IDS.toString() != '' }
+                        expression { params.HQ_GERRIT_IDS.toString() != '' }
+                    }
+                    expression { params.INIT.toBoolean() }
+                }
+            }
             steps {
                 //copy artifact 插件
                 copyArtifacts(projectName: "${JOB_NAME}",
@@ -173,6 +182,26 @@ pipeline {
             cleanWs()
         }
         success {
+            script {
+                if ( user_name ) {
+                    echo '成功'
+                }
+                def downUrl = "${env.job_work_dir}_temp/download_url"
+                if (fileExists(downUrl)) {
+                    echo "download_url File exists. Reading content..."
+                    env.DOWNLOAD_URL = readFile(file: downUrl).trim()
+                    String description = "<a href='${env.DOWNLOAD_URL}' target='_blank'>Download</a>"
+                    currentBuild.description = "${env.PROC_NAME} " +  "${env.BUILD_VERSION} \n" +
+                                                "${env.BUILD_MODE} " + "${env.BUILD_EDITION} \n" +
+                                                "${description}"
+                    sh """#!/bin/bash -x
+                        python3 cmd/robot.py --result Success --proc_name ${env.PROC_NAME} --build_url ${env.BUILD_URL} --version_type ${env.VERSION_TYPE} --time_stamp ${env.time_stamp} --update_app ${env.update_app} --build_user ${env.USER} --job_name ${env.JOB_NAME} --download_url ${env.DOWNLOAD_URL}
+                    """
+                    sh "rm -f ${downUrl}"
+                    echo "download_url File deleted."
+                }
+            }
+            echo "【jenkins日志】 最终结果:成功,工作名:${JOB_NAME},工作号:${BUILD_NUMBER}"
             sendEmail("Successful");
         }
         unstable {
@@ -180,6 +209,11 @@ pipeline {
         }
         failure {
             sendEmail("Failed");
+        }
+        cleanup {
+            echo "【jenkins日志】 处理遗留文件"
+            deleteDir()
+            cleanWs()
         }
     }
 }
