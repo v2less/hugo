@@ -47,8 +47,16 @@ currentBuild.description = "${env.PROC_NAME} " +  "${env.BUILD_VERSION} \n" +
     ¦   ¦   "${env.BUILD_MODE} " + "${env.BUILD_EDITION} \n" +
     ¦   ¦   "${description}"
 ```
+- SSH Agent
+该插件允许您通过 Jenkins 中的 ssh-agent 提供 SSH 凭据来构建。
 
-
+- HashiCorp Vault
+一款对敏感信息进行存储，并进行访问控制的工具。敏感信息指的是密码、token、秘钥等。它不仅可以存储敏感信息，还具有滚动更新、审计等功能。
+```groovy
+environment {
+    SECRET = vault path: 'secret/hello', key:'value'
+}
+```
 
 ## 文档信息
 ---
