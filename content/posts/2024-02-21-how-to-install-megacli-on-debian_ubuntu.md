@@ -7,7 +7,7 @@ draft: false
 ---
 ## 安装
 ```bash
-DISTRO=$(lsb_release -si)
+DISTRO=$(lsb_release -si | tr [A-Z] [a-z])
 DIST=$(lsb_release -c | grep "Codename:" | awk '{print $2}')  # jessie wheezy or stratch  whatelse
 wget -O - https://hwraid.le-vert.net/$DISTRO/hwraid.le-vert.net.gpg.key | sudo apt-key add -
 echo " deb http://hwraid.le-vert.net/$DISTRO $DIST main " | sudo tee /etc/apt/sources.list.d/raidtoolRepo.list
