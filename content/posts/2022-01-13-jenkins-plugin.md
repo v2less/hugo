@@ -57,6 +57,20 @@ environment {
     SECRET = vault path: 'secret/hello', key:'value'
 }
 ```
+- build user vars
+```groovy
+node {
+  def user=""
+  def userEmail=""
+  wrap([$class: 'BuildUser']) {
+    user = env.BUILD_USER_ID
+    userEmail = env.BUILD_USER_EMAIL
+  }
+  echo "The user name ${user }"
+  echo "The user email ${userEmail }"
+}
+```
+
 
 ## 文档信息
 ---
