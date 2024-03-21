@@ -58,6 +58,7 @@ environment {
 }
 ```
 - Docker Pipeline
+- Rebuilder
 - build user vars
 ```groovy
 node {
