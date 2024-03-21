@@ -57,6 +57,7 @@ environment {
     SECRET = vault path: 'secret/hello', key:'value'
 }
 ```
+- Docker Pipeline
 - build user vars
 ```groovy
 node {
