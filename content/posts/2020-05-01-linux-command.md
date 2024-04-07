@@ -33,7 +33,7 @@ uptime #当前系统上线运行时间等
 free -h #查看内存信息
 who #当前登录用户
 last #历史登录记录
-history #查看历史命令记录 
+history #查看历史命令记录
 history -c #清空历史命令
 !+历史命令数字 #重复执行制定命令
 sudo sosreport #收集系统信息，生成压缩文件，可以发送给远程维护方
@@ -52,7 +52,7 @@ tail -f #持续刷新查看文件信息
 cat .bashrc | tr [a-z] [A-Z] #文件输出的字母转换为大写
 wc -lwc #统计文件的行数、字数、字节数，参数不带，全统计
 stat #查看文件属性信息，包括属性、访问、修改时间等
-cut -d : -f 1 /etc/passwd # -d后为分隔符，-f为第几列  
+cut -d : -f 1 /etc/passwd # -d后为分隔符，-f为第几列
 diff --bried #比较文件是否相同
 diff -c #比较文件，哪些不同
 touch #创建文件
@@ -104,7 +104,7 @@ ls /dev/sda*  #*空置或无限
 ```bash
 PRICE=5
 echo Price is \$$PRICE #\$ 转义符为\，显示如下：
-  
+
 Price is $5
 `ls -la` # 反引号引用命令语句
 ```
@@ -186,7 +186,7 @@ EDITOR |用户默认的文本编辑器
 | j 或 向下箭头键(↓)                                           | 光标向下移动一个字符                                         |
 | k 或 向上箭头键(↑)                                           | 光标向上移动一个字符                                         |
 | l 或 向右箭头键(→)                                           | 光标向右移动一个字符                                         |
-| 如果你将右手放在键盘上的话，你会发现hjkl是排列在一起的，因此可以使用这四个按钮来移动光标。 如果想要进行多次移动的话，例如向下移动 30 行，可以使用 "30j" 或 "30↓" 的组合按键，亦即加上想要进行的次数(数字)后，按下动作即可！| | 
+| 如果你将右手放在键盘上的话，你会发现hjkl是排列在一起的，因此可以使用这四个按钮来移动光标。 如果想要进行多次移动的话，例如向下移动 30 行，可以使用 "30j" 或 "30↓" 的组合按键，亦即加上想要进行的次数(数字)后，按下动作即可！| |
 | [Ctrl] + [f]                                                 | 屏幕『向下』移动一页，相当于 [Page Down]按键 (常用)          |
 | [Ctrl] + [b]                                                 | 屏幕『向上』移动一页，相当于 [Page Up] 按键 (常用)           |
 | [Ctrl] + [d]                                                 | 屏幕『向下』移动半页                                         |
@@ -278,14 +278,14 @@ EDITOR |用户默认的文本编辑器
 
 ## netcli
 
-### 检查WiFi无线状态 
+### 检查WiFi无线状态
 `nmcli radio wifi`
 ### 启用WiFi无线
 `nmcli radio wifi on`
 ### 检查网络接口卡的状态
-`nmcli dev status` 
+`nmcli dev status`
 ### 检查可用的Wi-Fi访问点
-`nmcli dev wifi list` 
+`nmcli dev wifi list`
 ### 重新扫描
 `nmcli dev wifi rescan`
 ### 使用NMCLI连接到WiFi
@@ -295,7 +295,7 @@ EDITOR |用户默认的文本编辑器
 ### 删除wifi连接
 `sudo nmcli con del <ssid>`
 ### 关闭或打开以前的连接
-`nmcli con down` 
+`nmcli con down`
 `nmcli con up`
 
 ## ps
@@ -304,4 +304,9 @@ Linux ps命令用于显示当前进程 (process) 的状态。
 ps -ef  ###显示所有命令，连带命令行
 ps aux  ###列出目前所有的正在内存中的程序
 ps -afx ###看进程树 看各个进程的启动时间
+```
+## copy terminal content to the clip board
+```bash
+echo 123 | xclip -sel clip
+xclip < file
 ```
