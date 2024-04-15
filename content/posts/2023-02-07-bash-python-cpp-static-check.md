@@ -170,7 +170,7 @@ mkdir -p report
 cppcheck-htmlreport --file=cppcheck.xml --source-dir=src --report-dir=report
 ```
 
-详细参考：[https://wenbo1188.github.io/2017/07/23/cppcheck-manual-chinese/](https://wenbo1188.github.io/2017/07/23/cppcheck-manual-chinese) 
+详细参考：[https://wenbo1188.github.io/2017/07/23/cppcheck-manual-chinese/](https://wenbo1188.github.io/2017/07/23/cppcheck-manual-chinese)
 
 
 ## VS使用步骤
@@ -214,6 +214,52 @@ done
 dpkg-qurey -W --showformat='${Package}\\t${Status}\\n'
 ```
 
+## java static check
+### 安装docker
+```bash
+bash <(wget -q -O - https://get.docker.com) --mirror Aliyun
+#or
+curl -sSL https://get.daocloud.io/docker | sh
+```
+### 拉取镜像
+```bash
+docker pull freelxs/java-static-check:latest
+
+```
+### 使用checkstyle进行java代码格式规范检查
+>CheckStyle 是一种开发工具，可帮助程序员编写符合编码标准的 Java 代码。它使检查 Java 代码的过程自动化，从而使开发者免于完成这项无聊（但重要）的任务。这使得它非常适合想要强制执行编码标准的项目。
+
+>CheckStyle 可以检查源代码的许多方面。它可以发现类设计问题、方法设计问题。它还能够检查代码布局和格式问题。
+
+参考文档：https://checkstyle.sourceforge.io/google_style.html
+```bash
+cd 到源码目录
+docker run --rm -it -w /work -v $(pwd):/work freelxs/java-static-check:latest checktyle -c /opt/rules/google_checks.xml -f xml -o google-checkstyle-report.xml ./*
+```
+检查结果是：google-checkstyle-report.xml
+java项目庞大时，开始的检查文件一般较大，可以使用下面的方法打开：
+```bash
+xmllint --format largefile.xml | less
+```
+或者使用图形工具：[glogg](https://glogg.bonnefon.org/download.html)
+
+### 使用PMD进行java代码检查
+> 对于PMD名称含义，有个有趣的现象，PMD不存在一个准确的名称，在官网上你可以发现很有有趣的名称 ，比如：Pretty Much Done，Project Meets Deadline等。PMD是一款程序代码检查工具（可以支持多种语言，以Java为例），通过静态分析Java源文件来获知代码错误，也就是说在不运行不编译Java程序的情况下直接扫描Java源文件，报告错误 。该软件功能强大，扫描效率高，是Java程序员debug的好帮手。它附带了许多可以直接使用的规则，利用这些规则可以找出Java源程序的许多问题，比如：
+
+>可能的 Bugs：检查潜在代码错误，如空 try/catch/finally/switch 语句
+未使用代码（Dead code）：检查未使用的变量，参数，方法
+复杂的表达式：检查不必要的 if 语句，可被 while 替代的 for 循环
+重复的代码：检查重复的代码
+循环体创建新对象：检查在循环体内实例化新对象
+资源关闭：检查 Connect，Result，Statement 等资源使用之后是否被关闭掉
+用户还可以自己定义规则，检查Java代码是否符合某些特定的编码规范。例如，你可以编写一个规则，要求PMD找出所有创建Thread对象的操作。
+
+
+```bash
+cd 到源码目录
+docker run --rm -it -w /work -v $(pwd):/work freelxs/java-static-check:latest pmd -d ./* -l java -f xml -r pmd-report.xml --rulesets /opt/rules/quickstart.xml
+
+```
 
 
 ## 文档信息
