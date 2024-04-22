@@ -59,6 +59,7 @@ environment {
 ```
 - Docker Pipeline
 - Rebuilder
+- Gerrit Trigger
 - build user vars
 ```groovy
 node {
