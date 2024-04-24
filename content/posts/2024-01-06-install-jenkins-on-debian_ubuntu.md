@@ -106,4 +106,6 @@ node {
   echo "The user email ${userEmail }"
 }
 ```
+- warnings-ng
+>Jenkins 下一代静态分析工具报告的问题收集并可视化结果。
 
