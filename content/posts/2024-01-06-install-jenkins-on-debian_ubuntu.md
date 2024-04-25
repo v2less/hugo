@@ -12,9 +12,38 @@ curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee /
 echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
 sudo apt update
 sudo apt install jenkins -y
-#修改启动用户为你自己的用户名，替换掉jenkins用户
-sudo vi /etc/systemd/system/multi-user.target.wants/jenkins.service
+```
+sudo vi /lib/systemd/system/jenkins.service
+修改启动用户为你自己的用户名，替换掉jenkins用户
+```bash
+User=username
+Group=username
+```
+设定工作目录，默认即可
+```bash
+Environment="JENKINS_HOME=/var/lib/jenkins"
+WorkingDirectory=/var/lib/jenkins
+```
+自定义端口号
+```bash
+Environment="JENKINS_PORT=8079"
+```
+如果没有单独的域名，是作为域名子路经来配置的话：
+```bash
+Environment="JENKINS_PREFIX=/jenkins"
+```
+为了支持老版本的gerrit，需要修改配置
+```bash
+Environment="JAVA_OPTS=-Djava.awt.headless=true \
+-Djsch.client_pubkey=\"ssh-ed25519,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,rsa-sha2-512,rsa-sha2-256,ssh-rsa\" \
+-Djsch.server_host_key=\"ssh-ed25519,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,rsa-sha2-512,rsa-sha2-256,ssh-rsa\""
+```
+使得jenkins.service文件生效
+```bash
 sudo systemctl daemon-reload
+```
+其他步骤：
+```bash
 #修改权限
 sudo chown -R username:groupname /var/lib/jenkins
 sudo chown -R username:groupname /var/cache/jenkins
