@@ -39,6 +39,20 @@ sudo -i
 apt update -y
 apt upgrade -y
 ```
+## 挂载目录
+虚拟机内安装multipass-sshfs
+```bash
+sudo snap install multipass-sshfs
+```
+Windows上配置共享目录：
+```PowerShell
+# 开启目录挂载功能
+ multipass set local.privileged-mounts=true
+# 把本地目录D:\MultipassMounts 挂载到虚拟机实例 vm1 的目录 /mnt/shared
+ multipass mount D:\MultipassMounts vm1:/mnt/shared
+# 卸载
+multipass unmount vm1
+```
 
 ## 如何删除虚拟机实例（分三步）
 ```bash
