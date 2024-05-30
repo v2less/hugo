@@ -8,7 +8,7 @@ draft: false
 
 ## Opengrok简介
 
-OpenGrok是一个快速，便于使用的源码搜索引擎与对照引擎，它能够帮助我们快速的搜索、定位、对照代码树。一般常用于大型的项目中，比如Android系统源码。 
+OpenGrok是一个快速，便于使用的源码搜索引擎与对照引擎，它能够帮助我们快速的搜索、定位、对照代码树。一般常用于大型的项目中，比如Android系统源码。
 
 # 环境
 
@@ -32,8 +32,93 @@ python:3.9+
 sudo apt update
 sudo apt install -y openjdk-11-jre universal-ctags vim xfsprogs git locales
 ```
+ctags如果无法安装（例如旧版本的ubuntu），则可以编译安装：
+### install ctags
+```bash
+sudo apt update
+sudo apt install -y autoconf pkg-config make git
+git clone https://github.com/universal-ctags/ctags.git
+cd ctags
+./autogen.sh
+./configure
+make
+sudo make install
+ctags --version
+```
+### 配置$HOME/.ctags
+cat <<EOF | tee $HOME/.ctags
+# 基本设置
+--recurse=yes
+--exclude=.git
+--exclude=.repo
+--exclude=out
+--exclude=*.min.js
+--exclude=*.class
+--exclude=*.dex
+--exclude=*.o
+--exclude=*.ko
+--exclude=*.so
+--exclude=*.a
+--exclude=*.obj
+--exclude=*.d
+--exclude=*.lib
+--exclude=*.dll
+--exclude=*.jar
 
- ### 配置磁盘
+# shell
+--langmap=Shell:.sh
+--regex-sh=/^[ \t]*([A-Za-z0-9_]+)[ \t]*\(\)/\1/f,function,functions/
+--regex-sh=/^[ \t]*([A-Za-z0-9_]+)[ \t]*=[ \t]*\([^\)]+\)/\1/v,variable,variables/
+
+# Makefile
+--langmap=Makefile:.mk
+--regex-make=/^[ \t]*([A-Za-z0-9_]+)[ \t]*[:+]?=/\1/v,variable,variables/
+--regex-make=/^[ \t]*([A-Za-z0-9_]+)[ \t]*\([^\)]+\)/\1/f,function,functions/
+
+# Android.bp
+--langmap=Python:.bp
+--regex-python=/^[ \t]*([A-Za-z0-9_]+)[ \t]*=[ \t]*[A-Za-z0-9_]+/\1/v,variable,variables/
+--regex-python=/^[ \t]*([A-Za-z0-9_]+)[ \t]*:[ \t]*[A-Za-z0-9_]+/\1/t,target,targets/
+
+# Kotlin
+--langmap=Kotlin:.kt
+--regex-kotlin=/^[ \t]*class[ \t]+([A-Za-z0-9_]+)/\1/c,class,classes/
+--regex-kotlin=/^[ \t]*fun[ \t]+([A-Za-z0-9_]+)/\1/f,function,functions/
+--regex-kotlin=/^[ \t]*val[ \t]+([A-Za-z0-9_]+)/\1/v,variable,variables/
+--regex-kotlin=/^[ \t]*var[ \t]+([A-Za-z0-9_]+)/\1/v,variable,variables/
+
+# Java相关设置
+--langmap=Java:.java
+--regex-java=/^[ \t]*package[ \t]+([a-zA-Z0-9_\.]+);/\1/p,package,packages/
+--regex-java=/^[ \t]*import[ \t]+([a-zA-Z0-9_\.]+);/\1/i,import,imports/
+--regex-java=/^[ \t]*(public|private|protected|static|final|native|synchronized|abstract|threadsafe|transient)?[ \t]*class[ \t]+([A-Za-z0-9_]+)/\2/c,class,classes/
+--regex-java=/^[ \t]*(public|private|protected|static|final|native|synchronized|abstract|threadsafe|transient)?[ \t]*interface[ \t]+([A-Za-z0-9_]+)/\2/i,interface,interfaces/
+--regex-java=/^[ \t]*(public|private|protected|static|final|native|synchronized|abstract|threadsafe|transient)?[ \t]*enum[ \t]+([A-Za-z0-9_]+)/\2/e,enum,enums/
+--regex-java=/^[ \t]*@[A-Za-z0-9_]+\(/\0/d,annotation,annotations/
+
+# C/C++相关设置
+--langmap=C:.c.h
+--langmap=C++:.cpp.cxx.cc.hh.hxx.hpp
+--regex-c=/^[ \t]*#[ \t]*define[ \t]+([A-Za-z_][A-Za-z0-9_]*)/\1/d,define,defines/
+--regex-c=/^[ \t]*typedef[ \t]+(struct|union|enum)?[ \t]*([A-Za-z_][A-Za-z0-9_]*)/\2/t,typedef,typedefs/
+--regex-c=/^[ \t]*struct[ \t]+([A-Za-z_][A-Za-z0-9_]*)/\1/s,struct,structs/
+--regex-c=/^[ \t]*union[ \t]+([A-Za-z_][A-Za-z0-9_]*)/\1/u,union,unions/
+--regex-c=/^[ \t]*enum[ \t]+([A-Za-z_][A-Za-z0-9_]*)/\1/e,enum,enums/
+
+# XML相关设置（例如Android的manifest文件）
+--langmap=XML:.xml
+--regex-xml=/^[ \t]*<manifest[ \t]+[^>]*package[ \t]*=[ \t]*"([A-Za-z0-9_\.]+)"/\1/m,manifest,manifests/
+--regex-xml=/^[ \t]*<activity[ \t]+[^>]*android:name[ \t]*=[ \t]*"([A-Za-z0-9_\.]+)"/\1/a,activity,activities/
+
+# Python相关设置（有时AOSP中包含Python脚本）
+--langmap=Python:.py
+--regex-python=/^[ \t]*def[ \t]+([A-Za-z0-9_]+)/\1/f,function,functions/
+--regex-python=/^[ \t]*class[ \t]+([A-Za-z0-9_]+)/\1/c,class,classes/
+
+# 其他语言和特定设置可以根据需要添加
+EOF
+
+### 配置磁盘
 
 逻辑卷、格式化、挂载到/opengrok目录
 
@@ -49,8 +134,6 @@ EOF
 sudo mount -a
 ```
 
-
-
 ## Tomcat搭建
 
 ```bash
@@ -58,9 +141,9 @@ sudo mount -a
 sudo sed -ri "s/^#(.*zh_CN.UTF-8)/\1/g" /etc/locale.gen
 sudo locale-gen
 sudo useradd -m -U -d /opt/tomcat -s /bin/bash tomcat
-VERSION=10.1.4
+VERSION=10.1.24
 #wget -c -O /tmp/apache-tomcat-${VERSION}.tar.gz https://dlcdn.apache.org/tomcat/tomcat-10/v${VERSION}/bin/apache-tomcat-${VERSION}.tar.gz
-wget -c -O /tmp/apache-tomcat-${VERSION}.tar.gz https://mirrors.cnnic.cn/apache/tomcat/tomcat-10/v${VERSION}/bin/apache-tomcat-${VERSION}.tar.gz || exit 1
+wget -c -O /tmp/apache-tomcat-${VERSION}.tar.gz https://dlcdn.apache.org/tomcat/tomcat-10/v$VERSION/bin/apache-tomcat-$VERSION.tar.gz || exit 1
 
 sudo tar -xf /tmp/apache-tomcat-${VERSION}.tar.gz -C /opt/tomcat/
 sudo ln -sfn /opt/tomcat/apache-tomcat-${VERSION} /opt/tomcat/latest
@@ -69,7 +152,7 @@ sudo chown -R tomcat: /opt/tomcat
 
 cat <<EOF | sudo tee /etc/systemd/system/tomcat.service
 [Unit]
-Description=Tomcat 9.0 servlet container
+Description=Tomcat 10.1 servlet container
 After=network.target
 
 [Service]
@@ -93,6 +176,9 @@ ExecStop=/opt/tomcat/latest/bin/shutdown.sh
 WantedBy=multi-user.target
 EOF
 
+#修改端口号8080为其他端口
+sudo vi /opt/tomcat/latest/conf/server.xml
+
 sudo systemctl daemon-reload
 sudo systemctl enable --now tomcat
 sudo systemctl restart tomcat
@@ -109,7 +195,7 @@ sudo systemctl status tomcat
 #!/bin/bash
 sudo chown -R tomcat: /opengrok
 mkdir -p /opengrok/{src,data,dist,etc,log}
-sudo wget -c -O /tmp/opengrok.tar.gz https://github.com/oracle/opengrok/releases/download/1.7.41/opengrok-1.7.41.tar.gz || exit 1
+sudo wget -c -O /tmp/opengrok.tar.gz https://github.com/oracle/opengrok/releases/download/1.7.42/opengrok-1.7.42.tar.gz || exit 1
 sync
 tar -C /opengrok/dist --strip-components=1 -xzf /tmp/opengrok.tar.gz
 cp /opengrok/dist/doc/logging.properties /opengrok/etc
@@ -119,18 +205,24 @@ popd >/dev/null || exit 1
 
 sudo rm -rf /opt/tomcat/latest/webapps/ROOT
 sudo rm -rf /opt/tomcat/latest/webapps/ROOT.war
-sudo chown -R tomcat: /opengrok
+sudo chown -R tomcat:tomcat /opengrok
 #改成ROOT.war是为了访问http地址时不需要跟/source路径
 sudo runuser -l tomcat -c "cp /opengrok/dist/lib/source.war /opengrok/dist/lib/ROOT.war"
 sudo runuser -l tomcat -c "opengrok-deploy -c /opengrok/etc/configuration.xml /opengrok/dist/lib/ROOT.war /opt/tomcat/latest/webapps/"
-#sudo runuser -l tomcat -c "java -Djava.util.logging.config.file=/opengrok/etc/logging.properties -jar /opengrok/dist/lib/opengrok.jar -c /usr/bin/ctags -s /opengrok/src -d /opengrok/data -H -P -S -G -W /opengrok/etc/configuration.xml -U http://127.0.0.1:8080"
+#修改log路径
+sudo -u tomcat bash <<EOF
+sed -i "s/=.*opengrok%g.%u.log/= \/opengrok\/log\/opengrok%g.%u.log/g" /opengrok/etc/logging.properties
+EOF
 cat << EOF | sudo tee /usr/local/bin/opengrok-index
+!/usr/bin/env bash
+logfile=/opengrok/log/opengrop-index.log
+exec > >(tee $logfile) 2>&1
 sudo runuser -l tomcat -c "opengrok-indexer \
     -J=-Djava.util.logging.config.file=/opengrok/etc/logging.properties \
     -a /opengrok/dist/lib/opengrok.jar -- \
     -c /usr/bin/ctags \
     -s /opengrok/src -d /opengrok/data -H -P -S -G \
-    -W /opengrok/etc/configuration.xml -U http://127.0.0.1:8080"
+    -W /opengrok/etc/configuration.xml -U http://127.0.0.1:9090"
 EOF
 sudo chmod +x /usr/local/bin/opengrok-index
 ```
@@ -141,7 +233,7 @@ sudo chmod +x /usr/local/bin/opengrok-index
 
 ### 创建索引
 
-吃CPU，过程很慢，系统硬件配置要高配
+吃CPU和内存，过程很慢，系统硬件配置要高配
 
 ```bash
 /usr/local/bin/opengrok-index
