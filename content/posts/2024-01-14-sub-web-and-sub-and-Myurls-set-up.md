@@ -425,6 +425,27 @@ server {
 
 }
 ```
+## 使用Nginx Proxy Manager
+对短链接需要配置 允许 CORS
+```yml
+location / {
+    proxy_pass http://127.0.0.1:8002;  # 或者使用实际的IP和端口
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+
+    # 添加 CORS 头
+    add_header 'Access-Control-Allow-Origin' 'https://subweb.domainname.com' always;
+    add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS' always;
+    add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type, X-Requested-With' always;
+    add_header 'Access-Control-Allow-Credentials' 'true' always;
+
+    if ($request_method = 'OPTIONS') {
+        return 204;
+    }
+}
+```
 
 ## ufw
 如果有防火墙，比如ufw，需要放行80 443端口
