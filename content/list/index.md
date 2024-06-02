@@ -4,6 +4,11 @@ author: V2Less
 date: '2022-06-19'
 slug: list
 ---
+## 2024
+### Anime
+- Hunter
+- My Daemon
+
 ## 2023
 ### Book
 
