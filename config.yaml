@@ -10,7 +10,7 @@ ignoreErrors:
   - error-remote-getjson
 params:
   description: The way to minimalist.
-  copyright: Copyright © 2018-2021 lessismore
+  copyright: Copyright © 2018-2024 LessisMore
   dark: auto
   highlight: true
 menu:
