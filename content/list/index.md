@@ -8,6 +8,8 @@ slug: list
 ### Anime
 - Hunter
 - My Daemon
+- 死亡笔记
+- 怪兽8号
 
 ## 2023
 ### Book
