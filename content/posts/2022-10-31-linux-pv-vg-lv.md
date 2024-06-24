@@ -10,17 +10,27 @@ draft: false
 
 
 ```bash
+sudo apt install lvm2
+
+#清除文件系统
+sudo wipefs -a /dev/sda
+#创建物理卷
+sudo pvcreate /dev/sda
+sudo lvcreate -l 100%FREE -n lv_data data
 #可以跳过创建物理卷,直接创建卷组
-vgcreate -s 128M data /dev/sda
+sudo vgcreate -s 128M data /dev/sda
 #创建逻辑卷
-lvcreate -L 5T -n vz data
+sudo lvcreate -L 5T -n vz data
+#可以一次性分配完空间
+sudo lvcreate -l 100%FREE -n lv_data data
 #格式化为xfs格式
-mkfs.xfs -L vz /dev/data/vz
+sudo mkfs.xfs -L vz /dev/data/vz
 #获取UUID
-blkid
-#加入挂载
-vi /etc/fstab
-mount -a
+sudo blkid
+#加入fstab
+sudo vi /etc/fstab
+#挂载
+sudo mount -a
 
 ```
 
