@@ -10,6 +10,7 @@ slug: list
 - My Daemon
 - 死亡笔记
 - 怪兽8号
+- 葬送的芙莉莲
 
 ## 2023
 ### Book
