@@ -46,6 +46,7 @@ sudo make install
 ctags --version
 ```
 ### 配置$HOME/.ctags
+```bash
 cat <<EOF | tee $HOME/.ctags
 # 基本设置
 --recurse=yes
@@ -117,6 +118,7 @@ cat <<EOF | tee $HOME/.ctags
 
 # 其他语言和特定设置可以根据需要添加
 EOF
+```
 
 ### 配置磁盘
 
