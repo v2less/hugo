@@ -82,6 +82,8 @@ node {
 >该插件允许屏蔽可能出现在控制台中的密码，包括定义为构建参数的密码。
 - Pipeline Utility Steps
 从流水线中的特定阶段重新开始执行
+- Build Timestamp
+生成构建启动时间，无论是否排队，变量：BUILD_TIMESTAMP
 
 ## 文档信息
 ---
