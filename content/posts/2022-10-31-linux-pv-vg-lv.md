@@ -16,10 +16,10 @@ sudo apt install lvm2
 sudo wipefs -a /dev/sda
 #创建物理卷
 sudo pvcreate /dev/sda
-sudo lvcreate -l 100%FREE -n lv_data data
 #可以跳过创建物理卷,直接创建卷组
 sudo vgcreate -s 128M data /dev/sda
 #创建逻辑卷
+sudo lvcreate -l 100%FREE -n lv_data data
 sudo lvcreate -L 5T -n vz data
 #可以一次性分配完空间
 sudo lvcreate -l 100%FREE -n lv_data data
