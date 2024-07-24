@@ -30,7 +30,7 @@ python:3.9+
 
 ```bash
 sudo apt update
-sudo apt install -y openjdk-11-jre universal-ctags vim xfsprogs git locales
+sudo apt install -y openjdk-11-jre vim xfsprogs git locales
 ```
 ctags如果无法安装（例如旧版本的ubuntu），则可以编译安装：
 ### install ctags
@@ -97,6 +97,15 @@ cat <<EOF | tee $HOME/.ctags
 --regex-java=/^[ \t]*(public|private|protected|static|final|native|synchronized|abstract|threadsafe|transient)?[ \t]*enum[ \t]+([A-Za-z0-9_]+)/\2/e,enum,enums/
 --regex-java=/^[ \t]*@[A-Za-z0-9_]+\(/\0/d,annotation,annotations/
 
+# JavaScript相关设置
+--langdef=JavaScript
+--langmap=JavaScript:.js
+--regex-JavaScript=/^[ \t]*class[ \t]+([A-Za-z0-9_]+)/\1/c,class,classes/
+--regex-JavaScript=/function[ \t]+([A-Za-z0-9_]+)[ \t]*\(/\1/f,function,functions/
+--regex-JavaScript=/^[ \t]*var[ \t]+([A-Za-z0-9_]+)[ \t]*=[ \t]*/\1/v,variable,variables/
+--regex-JavaScript=/^[ \t]*let[ \t]+([A-Za-z0-9_]+)[ \t]*=[ \t]*/\1/v,variable,variables/
+--regex-JavaScript=/^[ \t]*const[ \t]+([A-Za-z0-9_]+)[ \t]*=[ \t]*/\1/v,variable,variables/
+
 # C/C++相关设置
 --langmap=C:.c.h
 --langmap=C++:.cpp.cxx.cc.hh.hxx.hpp
@@ -107,16 +116,56 @@ cat <<EOF | tee $HOME/.ctags
 --regex-c=/^[ \t]*enum[ \t]+([A-Za-z_][A-Za-z0-9_]*)/\1/e,enum,enums/
 
 # XML相关设置（例如Android的manifest文件）
---langmap=XML:.xml
+--langdef=xml
+--langmap=xml:.xml
+
 --regex-xml=/^[ \t]*<manifest[ \t]+[^>]*package[ \t]*=[ \t]*"([A-Za-z0-9_\.]+)"/\1/m,manifest,manifests/
 --regex-xml=/^[ \t]*<activity[ \t]+[^>]*android:name[ \t]*=[ \t]*"([A-Za-z0-9_\.]+)"/\1/a,activity,activities/
 
 # Python相关设置（有时AOSP中包含Python脚本）
+--langdef=Python
 --langmap=Python:.py
 --regex-python=/^[ \t]*def[ \t]+([A-Za-z0-9_]+)/\1/f,function,functions/
 --regex-python=/^[ \t]*class[ \t]+([A-Za-z0-9_]+)/\1/c,class,classes/
 
+# LDScript
+--langdef=LdScript
+--langmap=LdScript:.ld
+--regex-LdScript=/^[ \t]*([A-Za-z0-9_]+)[ \t]*:[ \t]*/\1/s,symbol,symbols/
+--regex-LdScript=/^[ \t]*SECTIONS[ \t]*{/\0/s,section,sections/
+
+# Rust
+--langdef=Rust
+--langmap=Rust:.rs
+--regex-Rust=/^[ \t]*fn[ \t]+([a-zA-Z0-9_]+)/\1/f,functions/
+--regex-Rust=/^[ \t]*struct[ \t]+([a-zA-Z0-9_]+)/\1/s,structs/
+--regex-Rust=/^[ \t]*enum[ \t]+([a-zA-Z0-9_]+)/\1/e,enums/
+--regex-Rust=/^[ \t]*mod[ \t]+([a-zA-Z0-9_]+);/\1/m,modules/
+--regex-Rust=/^[ \t]*trait[ \t]+([a-zA-Z0-9_]+)/\1/t,traits/
+--regex-Rust=/^[ \t]*impl[ \t]+([a-zA-Z0-9_]+)/\1/i,implementations/
+--regex-Rust=/^[ \t]*let[ \t]+([a-zA-Z0-9_]+):/\1/v,variables/
+--regex-Rust=/^pub[ \t]+(const|static)[ \t]+([a-zA-Z0-9_]+):/\2/c,constants/
+
+# Go
+--langdef=Go
+--langmap=Go:.go
+--regex-Go=/^[ \t]*func[ \t]+\(\s*[^\)]*\s*\)\s*([a-zA-Z0-9_]+)/\1/f,functions/
+--regex-Go=/^[ \t]*func[ \t]+([a-zA-Z0-9_]+)\s*\(/\\1/f,functions/
+--regex-Go=/^[ \t]*type[ \t]+([a-zA-Z0-9_]+)[ \t]+struct/\1/s,structs/
+--regex-Go=/^[ \t]*type[ \t]+([a-zA-Z0-9_]+)[ \t]+interface/\1/i,interfaces/
+--regex-Go=/^[ \t]*package[ \t]+([a-zA-Z0-9_]+)/\1/p,packages/
+--regex-Go=/^[ \t]*import[ \t]+"([^"]+)"/\1/n,imports/
+--regex-Go=/^[ \t]*type[ \t]+([a-zA-Z0-9_]+)/\1/t,types/
+--regex-Go=/^[ \t]*var[ \t]+([a-zA-Z0-9_]+)/\1/v,variables/
+--regex-Go=/^[ \t]*const[ \t]+([a-zA-Z0-9_]+)/\1/c,consts/
+
+
 # 其他语言和特定设置可以根据需要添加
+# iniconf
+--langdef=iniconf
+--langmap=iniconf:.ini
+--regex-iniconf=/^[ \t]*([a-zA-Z0-9_.-]+)[ \t]*=[ \t]*([^;#]*)/\1/v,variable/
+--regex-iniconf=/^[ \t]*\[[ \t]*([a-zA-Z0-9_.-]+)[ \t]*\]/\1/s,section/
 EOF
 ```
 
@@ -169,7 +218,7 @@ Environment="JAVA_OPTS=-Djava.security.egd=file:///dev/urandom"
 Environment="CATALINA_BASE=/opt/tomcat/latest"
 Environment="CATALINA_HOME=/opt/tomcat/latest"
 Environment="CATALINA_PID=/opt/tomcat/latest/temp/tomcat.pid"
-Environment="CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC"
+Environment="CATALINA_OPTS=-Xms512M -Xmx8192M -server -XX:+UseParallelGC"
 
 ExecStart=/opt/tomcat/latest/bin/startup.sh
 ExecStop=/opt/tomcat/latest/bin/shutdown.sh
@@ -217,12 +266,12 @@ sed -i "s/=.*opengrok%g.%u.log/= \/opengrok\/log\/opengrok%g.%u.log/g" /opengrok
 EOF
 cat << EOF | sudo tee /usr/local/bin/opengrok-index
 !/usr/bin/env bash
-logfile=/opengrok/log/opengrop-index.log
+logfile=/opengrok/log/opengrok-index.log
 exec > >(tee $logfile) 2>&1
 sudo runuser -l tomcat -c "opengrok-indexer \
     -J=-Djava.util.logging.config.file=/opengrok/etc/logging.properties \
     -a /opengrok/dist/lib/opengrok.jar -- \
-    -c /usr/bin/ctags \
+    -c /usr/local/bin/ctags \
     -s /opengrok/src -d /opengrok/data -H -P -S -G \
     -W /opengrok/etc/configuration.xml -U http://127.0.0.1:9090"
 EOF
