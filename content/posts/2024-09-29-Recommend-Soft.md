@@ -48,16 +48,17 @@ ruff format                          # Format all files in the current directory
 - Barrier
 一套键盘鼠标控制多台电脑的工具。该项目通过模拟 KVM 切换器功能，实现多台电脑、不同操作系统，共享一套键盘鼠标，让工作流程更加高效。它安装简单使用方便，无需复杂的配置，支持自定义热键、多种操作系统、可视化操作界面等功能。
 https://github.com/debauchee/barrier
-- dua
-View disk space usage and delete unwanted data, fast.
-```bash
-# df -Th
-dua -i
-```
-https://github.com/Byron/dua-cli
 - dust
 A more intuitive version of du in rust
 https://github.com/bootandy/dust
+- dysk
+df by rust.
+A linux utility to get information on filesystems, like df but better
+```bash
+# df -Th
+dysk
+```
+https://github.com/Canop/dysk
 
 
 
