@@ -19,6 +19,10 @@ sudo vi /lib/systemd/system/jenkins.service
 User=username
 Group=username
 ```
+```bash
+sudo sed -i 's/User=jenkins/User=username/g' /lib/systemd/system/jenkins.service
+sudo sed -i 's/Group=jenkins/Group=username/g' /lib/systemd/system/jenkins.service
+```
 设定工作目录，默认即可
 ```bash
 Environment="JENKINS_HOME=/var/lib/jenkins"
@@ -50,10 +54,10 @@ sudo chown -R username:groupname /var/cache/jenkins
 #启动
 sudo systemctl restart jenkins
 #替换插件升级服务器
-sed -i 's/http:\/\/updates.jenkins-ci.org\/download/https:\/\/mirrors.tuna.tsinghua.edu.cn\/jenkins/g' /var/lib/jenkins/updates/default.json && sed -i 's/http:\/\/www.google.com/https:\/\/www.baidu.com/g' /var/lib/jenkins/updates/default.json
-
-sed -i 's/<url.*url>/<url>https:\/\/mirrors.tuna.tsinghua.edu.cn\/jenkins\/updates\/update-center.json<\/url>/g' /var/li
-b/jenkins/hudson.model.UpdateCenter.xml
+sed -i 's/http[s]*:\/\/updates.jenkins-ci.org\/download/https:\/\/mirrors.tuna.tsinghua.edu.cn\/jenkins/g' /var/lib/jenkins/updates/default.json
+sed -i 's/http[s]*:\/\/updates.jenkins.io\/download/https:\/\/mirrors.tuna.tsinghua.edu.cn\/jenkins/g' /var/lib/jenkins/updates/default.json
+sed -i 's/http[s]*:\/\/www.google.com/https:\/\/www.baidu.com/g' /var/lib/jenkins/updates/default.json
+sed -i 's/<url.*url>/<url>https:\/\/mirrors.tuna.tsinghua.edu.cn\/jenkins\/updates\/update-center.json<\/url>/g' /var/lib/jenkins/hudson.model.UpdateCenter.xml
 
 #让你的用户为sudo用户，并免密码
 sudo visudo

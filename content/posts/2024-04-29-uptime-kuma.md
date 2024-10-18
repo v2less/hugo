@@ -31,7 +31,7 @@ docker compose up -d
 token: 11413887085e629903001cd13505677570
 生成base64编码值：
 ```bash
-echo 'username:11413887085e629903001cd13505677570' | base64
+echo -n 'username:11413887085e629903001cd13505677570' | base64
 dXNlcm5hbWU6MTE0MTM4ODcwODVlNjI5OTAzMDAxY2QxMzUwNTY3NzU3MAo=
 ```
 - 添加监控项
