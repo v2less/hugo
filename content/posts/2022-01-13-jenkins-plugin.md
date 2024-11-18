@@ -84,6 +84,8 @@ node {
 从流水线中的特定阶段重新开始执行
 - Build Timestamp
 生成构建启动时间，无论是否排队，变量：BUILD_TIMESTAMP
+- Configuration Slicing
+对项目属性进行批量设置。
 
 ## 文档信息
 ---
