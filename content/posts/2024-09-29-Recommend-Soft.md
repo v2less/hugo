@@ -60,7 +60,21 @@ dysk
 ```
 https://github.com/Canop/dysk
 
+- 休息提醒程序
+为了避免坐在电脑跟前忘记休息，我找到了 Stretchly 这个不错的休息提醒程序。我一般设置一定的强制休息时间，并根据它的提示做些小运动。Stretchly 是开源跨平台应用，支持 Linux、macOS 和 Windows。(https://hovancik.net/stretchly/)
 
+- dokploy
+开源的 Linux 面板
+https://dokploy.com
+
+界面很美观，功能很强大，而且易用，一键点击各种安装，想要的一般功能都有了：
+
+    * 应用和数据库安装和管理
+    * Docker compose 管理
+    * 数据库备份
+    * 各种模版
+    * 监控/告警
+    * 证书管理配置
 
 
 
