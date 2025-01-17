@@ -103,6 +103,64 @@ OceanWP
 可以自定义，关闭主页文章内容的显示，只保留标题。
 
 
+## 推送文章的python脚本
+```python
+#!/usr/bin/env python3
+import requests
+import argparse
+from requests.auth import HTTPBasicAuth
+
+# WordPress API 配置
+API_URL = "https://wordpress.xxx.com/wp-json/wp/v2/posts"
+USERNAME = "admin"
+PASSWORD = "生成一个应用密码"
+
+# 从文件中读取文章内容
+def read_file(file_path):
+    try:
+        with open(file_path, 'r', encoding='utf-8') as file:
+            return file.read()
+    except FileNotFoundError:
+        print(f"Error: File '{file_path}' not found.")
+        return None
+
+# 发布文章函数
+def publish_post(title, content, status="publish"):
+    payload = {
+        "title": title,
+        "content": content,
+        "status": status
+    }
+
+    try:
+        response = requests.post(
+            API_URL,
+            auth=HTTPBasicAuth(USERNAME, PASSWORD),
+            json=payload
+        )
+
+        if response.status_code == 201:  # HTTP 201 Created
+            print(response.json()["link"])
+        else:
+            print("Failed to create post.")
+            print("Status Code:", response.status_code)
+            print("Response:", response.json())
+    except requests.exceptions.RequestException as e:
+        print(f"Request failed: {e}")
+
+# 主程序
+if __name__ == "__main__":
+    # 设置命令行参数
+    parser = argparse.ArgumentParser(description="Publish a Markdown file as a WordPress post.")
+    parser.add_argument("--title", required=True, help="The title of the post")  # 标题作为必填参数
+    parser.add_argument("--file_path", required=True, help="Path to the Markdown file")  # 文件路径作为必填参数
+    args = parser.parse_args()
+
+    # 从文件读取内容
+    content = read_file(args.file_path)
+    if content:
+        publish_post(args.title, content)
+```
 
 
 
