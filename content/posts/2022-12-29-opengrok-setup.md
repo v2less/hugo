@@ -184,6 +184,23 @@ UUID="cdf4bd32-525b-4340-97ad-b67c34b64d2c" /opengrok  xfs  defaults 0 2
 EOF
 sudo mount -a
 ```
+### 系统配置
+JVM 启动时根据堆大小计算出它可能需要的 内存映射（memory mappings）数量，这依赖于内核参数：
+```bash
+/proc/sys/vm/max_map_count
+```
+
+修改：
+```bash
+sudo vim /etc/sysctl.conf
+vm.max_map_count=524288
+
+#保存后执行
+sudo sysctl -p
+#验证
+cat /proc/sys/vm/max_map_count
+```
+
 
 ## Tomcat搭建
 
