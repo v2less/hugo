@@ -67,6 +67,11 @@ mysql> quit;
 ```conf
 DBPassword=password
 ```
+### 全局启用执行脚本功能
+编辑配置文件 /etc/zabbix/zabbix_server.conf
+```conf
+EnableGlobalScripts=1
+```
 ### 为Zabbix前端配置PHP
 编辑配置文件 /etc/zabbix/nginx.conf uncomment and set 'listen' and 'server_name' directives.
 ```bash
@@ -118,10 +123,112 @@ wget https://cdn.zabbix.com/zabbix/binaries/stable/7.0/7.0.10/zabbix_agent-7.0.1
 
 https://github.com/bartmichu/zfs-zabbix-userparams
 
+## 自定义触发项
+增加磁盘容量告警时，提示剩余可用空间：
+数据采集-->模板-->Linux by Zabbix agent-->自动发现-->	Get filesystems: Mounted filesystem discovery -->触发器类型-->Linux: FS [{#FSNAME}]: Space is critically low-->事件名称
+增加：
+```bash
+free {{?last(//vfs.fs.dependent.size[{#FSNAME},free])/1024/1024/1024}.fmtnum(1)}GB)
+```
+结果：
+```bash
+Linux: FS [{#FSNAME}]: Space is critically low (used > {$VFS.FS.PUSED.MAX.CRIT:"{#FSNAME}"}%, total {{?last(//vfs.fs.dependent.size[{#FSNAME},total])/1024/1024/1024}.fmtnum(1)}GB, free {{?last(//vfs.fs.dependent.size[{#FSNAME},free])/1024/1024/1024}.fmtnum(1)}GB)
+```
+## 告警配置
+### 告警脚本
+```bash
+cd /usr/lib/zabbix/alertscripts
 
+cat >wechat.py<<'EOF' 
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
+import requests
+import json
+import sys
 
+# Webhook URL
+api_url = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=xxxxxxxxxxxxxxxxxx"  #替换为自己企业微信群机器人的webhook地址
 
+# HTTP headers
+headers = {'Content-Type': 'application/json;charset=utf-8'}
+
+# 定义发送消息的函数
+def send_message(text):
+    # 构建消息体
+    json_text = {
+        "msgtype": "text",
+        "text": {
+            "content": text
+        }
+    }
+    
+    # 发送 POST 请求
+    response = requests.post(api_url, json=json_text, headers=headers)
+    
+    # 检查响应状态码
+    if response.status_code == 200:
+        print("Message sent successfully.")
+    else:
+        print(f"Failed to send message. Status code: {response.status_code}")
+
+# 主函数
+if __name__ == '__main__':
+    # 检查命令行参数是否正确
+    if len(sys.argv) < 2:
+        print("Usage: python3 wechat.py <message>")
+        sys.exit(1)
+    
+    # 获取命令行参数中的消息内容
+    text = sys.argv[1]
+    
+    # 调用发送消息函数
+    send_message(text)
+EOF    
+```
+### 创建告警媒介
+告警-->媒介-->创建媒介类型:
+名称：即时消息告警
+类型：脚本
+脚本名称：message.py
+脚本参数：{ALERT.MESSAGE}
+### 告警动作
+告警-动作-触发器动作-创建动作：
+名称：即时消息告警
+条件：触发器示警度 大于等于 一般严重
+操作：发送给用户组和用户 选择 administrators
+发送至媒体类型：选择上面添加的 即时消息告警
+自定义消息内容：
+	主题：告警通知
+	消息模板：
+```bash
+【告警】
+告警设备：{HOST.NAME}
+告警内容：{EVENT.NAME}
+监控项目：{ITEM.NAME}
+监控取值：{ITEM.LASTVALUE}
+告警严重性：{EVENT.SEVERITY}
+当前状态：{EVENT.STATUS}
+告警时间：{EVENT.DATE} {EVENT.TIME}
+事件ID：{EVENT.ID}
+```
+
+再添加一个告警恢复操作，类似上面，只是消息模板：
+```bash
+【告警解除】
+告警设备：{HOST.NAME}
+告警内容：{EVENT.NAME}
+监控项目：{ITEM.NAME}
+监控取值：{ITEM.LASTVALUE}
+告警严重性：{EVENT.SEVERITY}
+当前状态：{EVENT.RECOVERY.STATUS}
+告警时间：{EVENT.DATE} {EVENT.TIME}
+恢复时间：{EVENT.RECOVERY.TIME}
+持续时间：{EVENT.AGE}
+事件ID：{EVENT.RECOVERY.ID}
+```
+### 告警用户配置
+用户-->用户-->报警媒介-->添加 即时消息告警 --> 收件人 ALL -->更新
 
 
 
